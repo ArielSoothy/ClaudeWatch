@@ -4,7 +4,6 @@ actor RelayService {
     private let baseURL: URL
     private let secret: String
 
-    // Default to the deployed relay — configurable in Settings
     init(
         baseURL: String = "https://claudewatch-relay.vercel.app",
         secret: String = ""
@@ -71,18 +70,67 @@ actor RelayService {
         }
     }
 
+    // MARK: - Messages (Chat via Claude Code sub)
+
+    struct ChatResponse: Codable {
+        let id: String
+        let question: String
+        let answer: String?
+        let quickReplies: [String]?
+        let status: String
+    }
+
+    /// Send a question to the relay — Claude Code (running on Mac) will answer it
+    func sendQuestion(_ question: String) async throws -> String {
+        guard let url = URL(string: "\(baseURL)/api/messages") else {
+            throw RelayError.invalidURL
+        }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("Bearer \(secret)", forHTTPHeaderField: "Authorization")
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.timeoutInterval = 10
+        request.httpBody = try JSONSerialization.data(withJSONObject: ["question": question])
+
+        let (data, response) = try await URLSession.shared.data(for: request)
+        guard let http = response as? HTTPURLResponse, http.statusCode == 201 else {
+            throw RelayError.requestFailed
+        }
+
+        let decoded = try JSONDecoder().decode(ChatResponse.self, from: data)
+        return decoded.id
+    }
+
+    /// Poll for an answer to a question
+    func pollForAnswer(messageId: String) async throws -> ChatResponse? {
+        guard let url = URL(string: "\(baseURL)/api/messages?id=\(messageId)") else {
+            throw RelayError.invalidURL
+        }
+
+        var request = URLRequest(url: url)
+        request.setValue("Bearer \(secret)", forHTTPHeaderField: "Authorization")
+        request.timeoutInterval = 10
+
+        let (data, response) = try await URLSession.shared.data(for: request)
+        guard let http = response as? HTTPURLResponse, http.statusCode == 200 else {
+            throw RelayError.requestFailed
+        }
+
+        let decoded = try JSONDecoder().decode(ChatResponse.self, from: data)
+        return decoded.status == "answered" ? decoded : nil
+    }
+
     // MARK: - Errors
 
     enum RelayError: LocalizedError {
         case invalidURL
         case requestFailed
-        case noSecret
 
         var errorDescription: String? {
             switch self {
             case .invalidURL: return "Invalid relay URL"
             case .requestFailed: return "Relay request failed"
-            case .noSecret: return "No relay secret. Add one in Settings."
             }
         }
     }

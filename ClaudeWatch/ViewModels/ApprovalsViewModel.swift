@@ -26,8 +26,9 @@ final class ApprovalsViewModel: ObservableObject {
     // MARK: - Relay Connection
 
     func connectToRelay() {
-        guard let secret = RelaySettings.loadSecret(), !secret.isEmpty else {
-            // No relay configured — use local sample data
+        // Use saved secret, or fall back to built-in default
+        let secret = RelaySettings.loadSecret() ?? "840606e72d1ccdb07c930afc79225877"
+        guard !secret.isEmpty else {
             if requests.isEmpty { loadSampleData() }
             return
         }
