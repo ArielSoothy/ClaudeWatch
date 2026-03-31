@@ -6,7 +6,40 @@ struct SettingsView: View {
     var body: some View {
         NavigationStack {
             List {
-                // API Key
+                // Relay Connection
+                Section {
+                    if viewModel.hasRelay {
+                        HStack {
+                            Image(systemName: "antenna.radiowaves.left.and.right")
+                                .foregroundStyle(Theme.approve)
+                            Text("Connected")
+                                .font(.system(size: 14))
+                        }
+                        Button(role: .destructive) {
+                            viewModel.deleteRelay()
+                        } label: {
+                            Label("Disconnect", systemImage: "xmark.circle")
+                                .font(.system(size: 14))
+                        }
+                    } else {
+                        TextField("Relay secret", text: $viewModel.relaySecret)
+                            .font(.system(size: 13))
+                            .textInputAutocapitalization(.never)
+                            .autocorrectionDisabled()
+
+                        Button {
+                            viewModel.saveRelay()
+                        } label: {
+                            Label("Connect", systemImage: "antenna.radiowaves.left.and.right")
+                                .font(.system(size: 14))
+                        }
+                        .disabled(viewModel.relaySecret.isEmpty)
+                    }
+                } header: {
+                    Text("Claude Code Relay")
+                }
+
+                // API Key (optional — for direct chat)
                 Section {
                     if viewModel.hasAPIKey {
                         HStack {
@@ -36,7 +69,7 @@ struct SettingsView: View {
                         .disabled(viewModel.apiKey.isEmpty)
                     }
                 } header: {
-                    Text("Claude API")
+                    Text("Claude API (Optional)")
                 }
 
                 // Haptics
@@ -52,19 +85,6 @@ struct SettingsView: View {
                     .font(.system(size: 14))
                 } header: {
                     Text("Haptics")
-                }
-
-                // Notifications
-                Section {
-                    Toggle(isOn: Binding(
-                        get: { viewModel.settings.notificationsEnabled },
-                        set: { _ in viewModel.toggleNotifications() }
-                    )) {
-                        Text("Enable")
-                            .font(.system(size: 14))
-                    }
-                } header: {
-                    Text("Notifications")
                 }
 
                 // About
