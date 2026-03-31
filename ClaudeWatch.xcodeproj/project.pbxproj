@@ -1,0 +1,376 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A1000001 /* ClaudeWatchApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000001; };
+		A1000002 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000002; };
+		A1000003 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000003; };
+		A1000004 /* ApprovalRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000004; };
+		A1000005 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000005; };
+		A1000006 /* QueuedAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000006; };
+		A1000007 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000007; };
+		A1000008 /* KeychainService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000008; };
+		A1000009 /* ClaudeAPIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000009; };
+		A100000A /* HapticService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A200000A; };
+		A100000B /* OfflineQueueService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A200000B; };
+		A100000C /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A200000C; };
+		A100000D /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A200000D; };
+		A100000E /* ApprovalsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A200000E; };
+		A100000F /* MessagingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A200000F; };
+		A1000010 /* ActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000020; };
+		A1000011 /* QuickReplyChip.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000021; };
+		A1000012 /* StatusBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000022; };
+		A1000013 /* ApprovalsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000023; };
+		A1000014 /* ApprovalDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000024; };
+		A1000015 /* MessagingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000025; };
+		A1000016 /* VoiceInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000026; };
+		A1000017 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000027; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		A2000001 /* ClaudeWatchApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClaudeWatchApp.swift; sourceTree = "<group>"; };
+		A2000002 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		A2000003 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		A2000004 /* ApprovalRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApprovalRequest.swift; sourceTree = "<group>"; };
+		A2000005 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
+		A2000006 /* QueuedAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueuedAction.swift; sourceTree = "<group>"; };
+		A2000007 /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
+		A2000008 /* KeychainService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainService.swift; sourceTree = "<group>"; };
+		A2000009 /* ClaudeAPIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClaudeAPIService.swift; sourceTree = "<group>"; };
+		A200000A /* HapticService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticService.swift; sourceTree = "<group>"; };
+		A200000B /* OfflineQueueService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineQueueService.swift; sourceTree = "<group>"; };
+		A200000C /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
+		A200000D /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
+		A200000E /* ApprovalsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApprovalsViewModel.swift; sourceTree = "<group>"; };
+		A200000F /* MessagingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagingViewModel.swift; sourceTree = "<group>"; };
+		A2000010 /* ClaudeWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ClaudeWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A2000020 /* ActionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionButton.swift; sourceTree = "<group>"; };
+		A2000021 /* QuickReplyChip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickReplyChip.swift; sourceTree = "<group>"; };
+		A2000022 /* StatusBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusBadge.swift; sourceTree = "<group>"; };
+		A2000023 /* ApprovalsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApprovalsListView.swift; sourceTree = "<group>"; };
+		A2000024 /* ApprovalDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApprovalDetailView.swift; sourceTree = "<group>"; };
+		A2000025 /* MessagingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagingView.swift; sourceTree = "<group>"; };
+		A2000026 /* VoiceInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceInputView.swift; sourceTree = "<group>"; };
+		A2000027 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		A2000028 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		A3000001 = {
+			isa = PBXGroup;
+			children = (
+				A3000002 /* ClaudeWatch */,
+				A3000003 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		A3000002 /* ClaudeWatch */ = {
+			isa = PBXGroup;
+			children = (
+				A2000001 /* ClaudeWatchApp.swift */,
+				A2000002 /* ContentView.swift */,
+				A2000003 /* Theme.swift */,
+				A2000028 /* PrivacyInfo.xcprivacy */,
+				A3000010 /* Models */,
+				A3000011 /* Services */,
+				A3000012 /* ViewModels */,
+				A3000013 /* Views */,
+			);
+			path = ClaudeWatch;
+			sourceTree = "<group>";
+		};
+		A3000003 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A2000010 /* ClaudeWatch.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		A3000010 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				A2000004 /* ApprovalRequest.swift */,
+				A2000005 /* Message.swift */,
+				A2000006 /* QueuedAction.swift */,
+				A2000007 /* AppSettings.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		A3000011 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				A2000008 /* KeychainService.swift */,
+				A2000009 /* ClaudeAPIService.swift */,
+				A200000A /* HapticService.swift */,
+				A200000B /* OfflineQueueService.swift */,
+				A200000C /* NotificationService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		A3000012 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				A200000D /* SettingsViewModel.swift */,
+				A200000E /* ApprovalsViewModel.swift */,
+				A200000F /* MessagingViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		A3000013 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				A3000014 /* Components */,
+				A3000015 /* Approvals */,
+				A3000016 /* Messaging */,
+				A3000017 /* Settings */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		A3000014 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				A2000020 /* ActionButton.swift */,
+				A2000021 /* QuickReplyChip.swift */,
+				A2000022 /* StatusBadge.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		A3000015 /* Approvals */ = {
+			isa = PBXGroup;
+			children = (
+				A2000023 /* ApprovalsListView.swift */,
+				A2000024 /* ApprovalDetailView.swift */,
+			);
+			path = Approvals;
+			sourceTree = "<group>";
+		};
+		A3000016 /* Messaging */ = {
+			isa = PBXGroup;
+			children = (
+				A2000025 /* MessagingView.swift */,
+				A2000026 /* VoiceInputView.swift */,
+			);
+			path = Messaging;
+			sourceTree = "<group>";
+		};
+		A3000017 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				A2000027 /* SettingsView.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A4000001 /* ClaudeWatch */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A6000001;
+			buildPhases = (
+				A5000001 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ClaudeWatch;
+			productName = ClaudeWatch;
+			productReference = A2000010;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A7000001 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1610;
+				LastUpgradeCheck = 1610;
+				TargetAttributes = {
+					A4000001 = {
+						CreatedOnToolsVersion = 16.1;
+					};
+				};
+			};
+			buildConfigurationList = A6000003;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = A3000001;
+			productRefGroup = A3000003;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A4000001 /* ClaudeWatch */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A5000001 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A1000001,
+				A1000002,
+				A1000003,
+				A1000004,
+				A1000005,
+				A1000006,
+				A1000007,
+				A1000008,
+				A1000009,
+				A100000A,
+				A100000B,
+				A100000C,
+				A100000D,
+				A100000E,
+				A100000F,
+				A1000010,
+				A1000011,
+				A1000012,
+				A1000013,
+				A1000014,
+				A1000015,
+				A1000016,
+				A1000017,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		A8000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 669MRKNMNQ;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = ClaudeWatch;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKApplication = YES;
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = "com.arielsoothy.ClaudeWatch";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.arielsoothy.ClaudeWatch.watchapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "watchsimulator watchos";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = Debug;
+		};
+		A8000002 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 669MRKNMNQ;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = ClaudeWatch;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKApplication = YES;
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = "com.arielsoothy.ClaudeWatch";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.arielsoothy.ClaudeWatch.watchapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "watchsimulator watchos";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = Release;
+		};
+		A8000003 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				ONLY_ACTIVE_ARCH = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		A8000004 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A6000001 /* Build configuration list for PBXNativeTarget "ClaudeWatch" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A8000001 /* Debug */,
+				A8000002 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A6000003 /* Build configuration list for PBXProject "ClaudeWatch" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A8000003 /* Debug */,
+				A8000004 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = A7000001 /* Project object */;
+}
