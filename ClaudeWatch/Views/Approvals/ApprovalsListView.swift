@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct ApprovalsListView: View {
-    @Bindable var viewModel: ApprovalsViewModel
+    @ObservedObject var viewModel: ApprovalsViewModel
 
     var body: some View {
         NavigationStack {

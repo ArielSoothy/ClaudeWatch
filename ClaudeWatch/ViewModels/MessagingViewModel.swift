@@ -1,12 +1,11 @@
 import SwiftUI
 
-@Observable
 @MainActor
-final class MessagingViewModel {
-    var messages: [Message] = []
-    var isLoading = false
-    var errorMessage: String?
-    var quickReplies: [String] = [
+final class MessagingViewModel: ObservableObject {
+    @Published var messages: [Message] = []
+    @Published var isLoading = false
+    @Published var errorMessage: String?
+    @Published var quickReplies: [String] = [
         "Summarize this",
         "What should I do?",
         "Explain briefly",

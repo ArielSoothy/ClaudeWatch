@@ -1,12 +1,11 @@
 import SwiftUI
 
-@Observable
 @MainActor
-final class SettingsViewModel {
-    var apiKey: String = ""
-    var settings: AppSettings = .load()
-    var hasAPIKey: Bool = false
-    var showingSaveConfirmation = false
+final class SettingsViewModel: ObservableObject {
+    @Published var apiKey: String = ""
+    @Published var settings: AppSettings = .load()
+    @Published var hasAPIKey: Bool = false
+    @Published var showingSaveConfirmation = false
 
     init() {
         if let key = KeychainService.loadAPIKey() {

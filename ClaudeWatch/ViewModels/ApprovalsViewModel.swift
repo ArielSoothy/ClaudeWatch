@@ -1,10 +1,9 @@
 import SwiftUI
 
-@Observable
 @MainActor
-final class ApprovalsViewModel {
-    var requests: [ApprovalRequest] = []
-    var isLoading = false
+final class ApprovalsViewModel: ObservableObject {
+    @Published var requests: [ApprovalRequest] = []
+    @Published var isLoading = false
 
     var pendingRequests: [ApprovalRequest] {
         requests.filter { $0.status == .pending }

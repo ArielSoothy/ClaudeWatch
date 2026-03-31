@@ -2,7 +2,7 @@ import SwiftUI
 
 struct ApprovalDetailView: View {
     let request: ApprovalRequest
-    @Bindable var viewModel: ApprovalsViewModel
+    @ObservedObject var viewModel: ApprovalsViewModel
     @Environment(\.dismiss) private var dismiss
 
     private let quickResponses = [
