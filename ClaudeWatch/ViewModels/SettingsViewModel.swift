@@ -4,7 +4,7 @@ import SwiftUI
 final class SettingsViewModel: ObservableObject {
     @Published var apiKey: String = ""
     @Published var relaySecret: String = ""
-    @Published var relayURL: String = "https://claudewatch-relay.vercel.app"
+    @Published var relayURL: String = "https://claudewatch-relay-pynnfzcae-ariels-projects-62f6e5f2.vercel.app"
     @Published var settings: AppSettings = .load()
     @Published var hasAPIKey: Bool = false
     @Published var hasRelay: Bool = false
@@ -57,7 +57,7 @@ final class SettingsViewModel: ObservableObject {
     func deleteRelay() {
         RelaySettings.clear()
         relaySecret = ""
-        relayURL = "https://claudewatch-relay.vercel.app"
+        relayURL = "https://claudewatch-relay-pynnfzcae-ariels-projects-62f6e5f2.vercel.app"
         hasRelay = false
         HapticService.click()
     }

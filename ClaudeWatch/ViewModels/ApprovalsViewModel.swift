@@ -37,7 +37,7 @@ final class ApprovalsViewModel: ObservableObject {
             return
         }
 
-        let url = RelaySettings.loadURL() ?? "https://claudewatch-relay.vercel.app"
+        let url = RelaySettings.loadURL() ?? "https://claudewatch-relay-pynnfzcae-ariels-projects-62f6e5f2.vercel.app"
         relayService = RelayService(baseURL: url, secret: secret)
         isConnected = true
         retryCount = 0

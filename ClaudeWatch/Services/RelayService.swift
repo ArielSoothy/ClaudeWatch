@@ -5,7 +5,7 @@ actor RelayService {
     private let secret: String
 
     init(
-        baseURL: String = "https://claudewatch-relay.vercel.app",
+        baseURL: String = "https://claudewatch-relay-pynnfzcae-ariels-projects-62f6e5f2.vercel.app",
         secret: String = ""
     ) {
         self.baseURL = URL(string: baseURL)!
