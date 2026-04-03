@@ -20,7 +20,7 @@ final class MessagingViewModel: ObservableObject {
     }
 
     private func connectToRelay() {
-        let secret = RelaySettings.loadSecret() ?? "840606e72d1ccdb07c930afc79225877"
+        let secret = RelaySettings.loadSecret() ?? ""
         let url = RelaySettings.loadURL() ?? "https://claudewatch-relay-pynnfzcae-ariels-projects-62f6e5f2.vercel.app"
         relayService = RelayService(baseURL: url, secret: secret)
     }
