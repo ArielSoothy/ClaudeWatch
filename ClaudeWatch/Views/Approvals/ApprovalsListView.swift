@@ -76,16 +76,28 @@ private struct ApprovalRow: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
-            HStack {
+            HStack(spacing: 6) {
+                if request.isPermission {
+                    Image(systemName: "shield.checkered")
+                        .font(.system(size: 12))
+                        .foregroundStyle(Theme.accent)
+                }
                 Text(request.title)
                     .font(.system(size: 14, weight: .medium))
                     .lineLimit(2)
                 Spacer()
                 StatusBadge(status: request.status)
             }
-            Text(request.sender)
-                .font(.system(size: 12))
-                .foregroundStyle(Theme.textSecondary)
+            HStack(spacing: 4) {
+                if let tool = request.tool {
+                    Text(tool)
+                        .font(.system(size: 11, weight: .semibold))
+                        .foregroundStyle(Theme.accent)
+                }
+                Text(request.sender)
+                    .font(.system(size: 12))
+                    .foregroundStyle(Theme.textSecondary)
+            }
         }
         .padding(.vertical, 2)
     }

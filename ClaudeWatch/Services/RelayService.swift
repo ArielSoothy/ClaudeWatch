@@ -12,6 +12,24 @@ actor RelayService {
         self.secret = secret
     }
 
+    // MARK: - Retry Logic
+
+    private func withRetry<T>(maxAttempts: Int = 3, _ operation: () async throws -> T) async throws -> T {
+        var lastError: Error?
+        for attempt in 0..<maxAttempts {
+            do {
+                return try await operation()
+            } catch {
+                lastError = error
+                if attempt < maxAttempts - 1 {
+                    let delay = Double(1 << attempt) + Double.random(in: 0...1)
+                    try await Task.sleep(nanoseconds: UInt64(delay * 1_000_000_000))
+                }
+            }
+        }
+        throw lastError ?? RelayError.requestFailed
+    }
+
     // MARK: - Approvals
 
     struct ApprovalsResponse: Codable {
@@ -21,9 +39,13 @@ actor RelayService {
 
     struct RemoteApproval: Codable {
         let id: String
+        let type: String?
         let title: String
         let body: String
+        let watchBody: String?
         let sender: String
+        let tool: String?
+        let toolInput: String?
         let status: String
         let reply: String?
         let createdAt: String
@@ -31,83 +53,80 @@ actor RelayService {
     }
 
     func fetchApprovals(status: String? = nil) async throws -> [RemoteApproval] {
-        var urlString = "\(baseURL)/api/approvals"
-        if let status { urlString += "?status=\(status)" }
+        try await withRetry {
+            var urlString = "\(self.baseURL)/api/approvals"
+            if let status { urlString += "?status=\(status)" }
+            guard let url = URL(string: urlString) else { throw RelayError.invalidURL }
 
-        guard let url = URL(string: urlString) else { throw RelayError.invalidURL }
+            var request = URLRequest(url: url)
+            request.setValue("Bearer \(self.secret)", forHTTPHeaderField: "Authorization")
+            request.timeoutInterval = 10
 
-        var request = URLRequest(url: url)
-        request.setValue("Bearer \(secret)", forHTTPHeaderField: "Authorization")
-        request.timeoutInterval = 10
-
-        let (data, response) = try await URLSession.shared.data(for: request)
-        guard let http = response as? HTTPURLResponse, http.statusCode == 200 else {
-            throw RelayError.requestFailed
+            let (data, response) = try await URLSession.shared.data(for: request)
+            guard let http = response as? HTTPURLResponse, http.statusCode == 200 else {
+                throw RelayError.requestFailed
+            }
+            return try JSONDecoder().decode(ApprovalsResponse.self, from: data).approvals
         }
-
-        let decoded = try JSONDecoder().decode(ApprovalsResponse.self, from: data)
-        return decoded.approvals
     }
 
     func respondToApproval(id: String, status: String, reply: String?) async throws {
-        guard let url = URL(string: "\(baseURL)/api/approvals?id=\(id)") else {
-            throw RelayError.invalidURL
-        }
+        try await withRetry {
+            guard let url = URL(string: "\(self.baseURL)/api/approvals?id=\(id)") else {
+                throw RelayError.invalidURL
+            }
+            var request = URLRequest(url: url)
+            request.httpMethod = "PATCH"
+            request.setValue("Bearer \(self.secret)", forHTTPHeaderField: "Authorization")
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            request.timeoutInterval = 10
 
-        var request = URLRequest(url: url)
-        request.httpMethod = "PATCH"
-        request.setValue("Bearer \(secret)", forHTTPHeaderField: "Authorization")
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.timeoutInterval = 10
+            var body: [String: String] = ["status": status]
+            if let reply { body["reply"] = reply }
+            request.httpBody = try JSONSerialization.data(withJSONObject: body)
 
-        var body: [String: String] = ["status": status]
-        if let reply { body["reply"] = reply }
-        request.httpBody = try JSONSerialization.data(withJSONObject: body)
-
-        let (_, response) = try await URLSession.shared.data(for: request)
-        guard let http = response as? HTTPURLResponse, http.statusCode == 200 else {
-            throw RelayError.requestFailed
+            let (_, response) = try await URLSession.shared.data(for: request)
+            guard let http = response as? HTTPURLResponse, http.statusCode == 200 else {
+                throw RelayError.requestFailed
+            }
         }
     }
 
-    // MARK: - Messages (Chat via Claude Code sub)
+    // MARK: - Messages
 
     struct ChatResponse: Codable {
         let id: String
         let question: String
         let answer: String?
+        let watchSummary: String?
         let quickReplies: [String]?
         let status: String
     }
 
-    /// Send a question to the relay — Claude Code (running on Mac) will answer it
     func sendQuestion(_ question: String) async throws -> String {
-        guard let url = URL(string: "\(baseURL)/api/messages") else {
-            throw RelayError.invalidURL
+        try await withRetry {
+            guard let url = URL(string: "\(self.baseURL)/api/messages") else {
+                throw RelayError.invalidURL
+            }
+            var request = URLRequest(url: url)
+            request.httpMethod = "POST"
+            request.setValue("Bearer \(self.secret)", forHTTPHeaderField: "Authorization")
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            request.timeoutInterval = 10
+            request.httpBody = try JSONSerialization.data(withJSONObject: ["question": question])
+
+            let (data, response) = try await URLSession.shared.data(for: request)
+            guard let http = response as? HTTPURLResponse, http.statusCode == 201 else {
+                throw RelayError.requestFailed
+            }
+            return try JSONDecoder().decode(ChatResponse.self, from: data).id
         }
-
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.setValue("Bearer \(secret)", forHTTPHeaderField: "Authorization")
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.timeoutInterval = 10
-        request.httpBody = try JSONSerialization.data(withJSONObject: ["question": question])
-
-        let (data, response) = try await URLSession.shared.data(for: request)
-        guard let http = response as? HTTPURLResponse, http.statusCode == 201 else {
-            throw RelayError.requestFailed
-        }
-
-        let decoded = try JSONDecoder().decode(ChatResponse.self, from: data)
-        return decoded.id
     }
 
-    /// Poll for an answer to a question
     func pollForAnswer(messageId: String) async throws -> ChatResponse? {
         guard let url = URL(string: "\(baseURL)/api/messages?id=\(messageId)") else {
             throw RelayError.invalidURL
         }
-
         var request = URLRequest(url: url)
         request.setValue("Bearer \(secret)", forHTTPHeaderField: "Authorization")
         request.timeoutInterval = 10
@@ -116,7 +135,6 @@ actor RelayService {
         guard let http = response as? HTTPURLResponse, http.statusCode == 200 else {
             throw RelayError.requestFailed
         }
-
         let decoded = try JSONDecoder().decode(ChatResponse.self, from: data)
         return decoded.status == "answered" ? decoded : nil
     }

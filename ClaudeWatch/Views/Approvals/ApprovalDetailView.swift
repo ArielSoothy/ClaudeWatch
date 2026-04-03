@@ -18,12 +18,39 @@ struct ApprovalDetailView: View {
             VStack(alignment: .leading, spacing: Theme.spacingMD) {
                 // Header
                 VStack(alignment: .leading, spacing: Theme.spacingXS) {
-                    StatusBadge(status: request.status)
+                    HStack(spacing: 6) {
+                        StatusBadge(status: request.status)
+                        if request.isPermission {
+                            HStack(spacing: 3) {
+                                Image(systemName: "shield.checkered")
+                                    .font(.system(size: 10))
+                                Text("Permission")
+                                    .font(.system(size: 11, weight: .semibold))
+                            }
+                            .foregroundStyle(Theme.accent)
+                        }
+                    }
                     Text(request.title)
                         .font(.system(size: 16, weight: .semibold))
+                    if let tool = request.tool {
+                        Text(tool)
+                            .font(.system(size: 13, weight: .semibold))
+                            .foregroundStyle(Theme.accent)
+                    }
                     Text(request.sender)
                         .font(.system(size: 12))
                         .foregroundStyle(Theme.textSecondary)
+                }
+
+                // Tool input (for permission requests)
+                if let toolInput = request.toolInput {
+                    Text(toolInput)
+                        .font(.system(size: 12, design: .monospaced))
+                        .foregroundStyle(Theme.textPrimary)
+                        .padding(Theme.spacingSM)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .background(Theme.background)
+                        .clipShape(RoundedRectangle(cornerRadius: Theme.radiusSM))
                 }
 
                 // Body

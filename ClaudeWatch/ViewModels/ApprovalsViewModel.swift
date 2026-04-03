@@ -6,6 +6,7 @@ final class ApprovalsViewModel: ObservableObject {
     @Published var isLoading = false
     @Published var isConnected = false
     @Published var errorMessage: String?
+    @Published var retryCount = 0
 
     private var relayService: RelayService?
     private var pollTimer: Timer?
@@ -18,6 +19,10 @@ final class ApprovalsViewModel: ObservableObject {
         requests.filter { $0.status != .pending }
     }
 
+    var hasPendingPermissions: Bool {
+        pendingRequests.contains { $0.isPermission }
+    }
+
     init() {
         loadLocal()
         connectToRelay()
@@ -26,7 +31,6 @@ final class ApprovalsViewModel: ObservableObject {
     // MARK: - Relay Connection
 
     func connectToRelay() {
-        // Use saved secret, or fall back to built-in default
         let secret = RelaySettings.loadSecret() ?? "840606e72d1ccdb07c930afc79225877"
         guard !secret.isEmpty else {
             if requests.isEmpty { loadSampleData() }
@@ -36,6 +40,7 @@ final class ApprovalsViewModel: ObservableObject {
         let url = RelaySettings.loadURL() ?? "https://claudewatch-relay.vercel.app"
         relayService = RelayService(baseURL: url, secret: secret)
         isConnected = true
+        retryCount = 0
         startPolling()
     }
 
@@ -47,20 +52,25 @@ final class ApprovalsViewModel: ObservableObject {
     }
 
     private func startPolling() {
-        // Poll every 30 seconds
+        schedulePoll()
+        Task { await fetchFromRelay() }
+    }
+
+    private func schedulePoll() {
         pollTimer?.invalidate()
-        pollTimer = Timer.scheduledTimer(withTimeInterval: 30, repeats: true) { [weak self] _ in
+        // 5s when permissions pending, 15s otherwise
+        let interval: TimeInterval = hasPendingPermissions ? 5 : 15
+        pollTimer = Timer.scheduledTimer(withTimeInterval: interval, repeats: true) { [weak self] _ in
             Task { await self?.fetchFromRelay() }
         }
-        // Also fetch immediately
-        Task { await fetchFromRelay() }
     }
 
     func fetchFromRelay() async {
         guard let relay = relayService else { return }
         do {
             let remote = try await relay.fetchApprovals()
-            // Merge remote approvals with local state
+            var newPendingCount = 0
+
             for approval in remote {
                 if !requests.contains(where: { $0.id.uuidString == approval.id }) {
                     if let uuid = UUID(uuidString: approval.id) {
@@ -69,23 +79,47 @@ final class ApprovalsViewModel: ObservableObject {
                             case "rejected": .rejected
                             default: .pending
                         }
+                        let reqType: ApprovalRequest.RequestType =
+                            approval.type == "permission" ? .permission : .approval
+
                         let req = ApprovalRequest(
                             id: uuid,
                             title: approval.title,
-                            body: approval.body,
+                            body: approval.watchBody ?? approval.body,
                             sender: approval.sender,
+                            requestType: reqType,
+                            tool: approval.tool,
+                            toolInput: approval.toolInput,
                             status: status,
                             timestamp: ISO8601DateFormatter().date(from: approval.createdAt) ?? Date(),
                             selectedReply: approval.reply
                         )
                         requests.insert(req, at: 0)
+
+                        // Notify for new pending items
+                        if status == .pending {
+                            newPendingCount += 1
+                            NotificationService.scheduleLocalApproval(req, delay: 0.5)
+                        }
                     }
                 }
             }
+
+            if newPendingCount > 0 {
+                HapticService.notification()
+                // Switch to fast polling if permissions arrived
+                schedulePoll()
+            }
+
             errorMessage = nil
+            retryCount = 0
             saveLocal()
         } catch {
-            errorMessage = error.localizedDescription
+            retryCount += 1
+            errorMessage = retryCount >= 5 ? "Connection lost" : nil
+            if retryCount >= 5 {
+                isConnected = false
+            }
         }
     }
 
@@ -97,14 +131,12 @@ final class ApprovalsViewModel: ObservableObject {
         requests[index].selectedReply = reply
         HapticService.success()
         saveLocal()
+        schedulePoll() // May switch back to slow polling
 
-        // Send to relay if connected
         if let relay = relayService {
             Task {
                 try? await relay.respondToApproval(
-                    id: request.id.uuidString,
-                    status: "approved",
-                    reply: reply
+                    id: request.id.uuidString, status: "approved", reply: reply
                 )
             }
         }
@@ -116,13 +148,12 @@ final class ApprovalsViewModel: ObservableObject {
         requests[index].selectedReply = reply
         HapticService.failure()
         saveLocal()
+        schedulePoll()
 
         if let relay = relayService {
             Task {
                 try? await relay.respondToApproval(
-                    id: request.id.uuidString,
-                    status: "rejected",
-                    reply: reply
+                    id: request.id.uuidString, status: "rejected", reply: reply
                 )
             }
         }
@@ -137,6 +168,12 @@ final class ApprovalsViewModel: ObservableObject {
         requests.removeAll { $0.status != .pending }
         HapticService.click()
         saveLocal()
+    }
+
+    func refresh() {
+        retryCount = 0
+        isConnected = true
+        Task { await fetchFromRelay() }
     }
 
     // MARK: - Local Persistence
@@ -178,7 +215,7 @@ final class ApprovalsViewModel: ObservableObject {
     }
 }
 
-// MARK: - Relay Settings (stored alongside API key)
+// MARK: - Relay Settings
 
 enum RelaySettings {
     private static let secretKey = "claude_watch_relay_secret"
